@@ -1,4 +1,4 @@
-module github.com/cloudingcity/go-ftx
+module github.com/trever-io/go-ftx
 
 go 1.16
 

@@ -11,8 +11,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/cloudingcity/go-ftx/ftx/stream"
 	"github.com/gorilla/websocket"
+	"github.com/trever-io/go-ftx/ftx/stream"
 	"github.com/valyala/fasthttp"
 )
 
