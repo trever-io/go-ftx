@@ -44,6 +44,7 @@ type Client struct {
 
 	Accounts *AccountService
 	Markets  *MarketService
+	wallets  *WalletService
 }
 
 func New(opts ...Option) *Client {
@@ -57,12 +58,17 @@ func New(opts ...Option) *Client {
 	c.common.client = c
 	c.Accounts = (*AccountService)(&c.common)
 	c.Markets = (*MarketService)(&c.common)
+	c.wallets = (*WalletService)(&c.common)
 
 	for _, opt := range opts {
 		opt(c)
 	}
 
 	return c
+}
+
+func (c *Client) Wallets() IWalletService {
+	return c.wallets
 }
 
 func (c *Client) DoPublic(uri string, method string, in, out interface{}) error {
