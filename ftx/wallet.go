@@ -13,7 +13,7 @@ const pathCoins = "%s/wallet/coins"
 type IWalletService interface {
 	GetBalance() ([]*BalanceResponse, error)
 	GetWithdrawalHistory(opts *GetWithdrawalHistoryOptions) ([]*WithdrawalResponse, error)
-	RequestWithdrawal(request *WithdrawalRequest) (*WithdrawalRequestResponse, error)
+	RequestWithdrawal(request *WithdrawalRequest) (*WithdrawalResponse, error)
 	GetDepositHistory(opts *GetDepositHistoryOptions) ([]*DepositResponse, error)
 	GetCoins() ([]*CoinResponse, error)
 }
@@ -35,34 +35,21 @@ type WithdrawalResponse struct {
 	Tag     string
 	Fee     float64
 	Id      float64
-	Size    string
+	Size    float64
 	Status  string
 	Time    string
 	Method  string
 	Txid    string
-	Notes   string
 }
 
 type WithdrawalRequest struct {
-	Coin     string  `url:"coin"`
-	Size     float64 `url:"size"`
-	Address  string  `url:"address"`
-	Tag      string  `url:"tag"`
-	Method   string  `url:"method"`
-	Password string  `url:"password"`
-	Code     string  `url:"code"`
-}
-
-type WithdrawalRequestResponse struct {
-	Coin    string
-	Address string
-	Tag     string
-	Fee     float64
-	Id      float64
-	Size    string
-	Status  string
-	Time    string
-	Txid    string
+	Coin     string `url:"coin" json:"coin"`
+	Size     string `url:"size" json:"size"`
+	Address  string `url:"address" json:"address"`
+	Tag      string `url:"tag" json:"tag"`
+	Method   string `url:"method" json:"method"`
+	Password string `url:"password" json:"password"`
+	Code     string `url:"code" json:"code"`
 }
 
 type DepositResponse struct {
@@ -109,7 +96,6 @@ type GetWithdrawalHistoryOptions struct {
 	EndTime   int64 `url:"end_time"`
 }
 
-// based on api client in ftx.go
 func (s *WalletService) GetBalance() ([]*BalanceResponse, error) {
 	u := fmt.Sprintf(pathBalance, s.client.baseURL)
 
@@ -136,14 +122,10 @@ func (s *WalletService) GetWithdrawalHistory(opts *GetWithdrawalHistoryOptions) 
 
 }
 
-func (s *WalletService) RequestWithdrawal(request *WithdrawalRequest) (*WithdrawalRequestResponse, error) {
+func (s *WalletService) RequestWithdrawal(request *WithdrawalRequest) (*WithdrawalResponse, error) {
 	u := fmt.Sprintf(pathWithdrawal, s.client.baseURL)
-	// u, err := addOptions(u, opts)
-	// if err != nil {
-	// 	return nil, err
-	// }
 
-	var out *WithdrawalRequestResponse
+	var out *WithdrawalResponse
 
 	err := s.client.DoPrivate(u, http.MethodPost, &request, &out)
 
