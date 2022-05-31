@@ -43,7 +43,7 @@ type Client struct {
 	common service // Reuse a single struct instead of allocating one for each service on the heap.
 
 	Accounts *AccountService
-	Markets  *MarketService
+	markets  *MarketService
 	wallets  *WalletService
 }
 
@@ -57,7 +57,7 @@ func New(opts ...Option) *Client {
 	c := &Client{baseURL: defaultBaseURL, client: httpClient}
 	c.common.client = c
 	c.Accounts = (*AccountService)(&c.common)
-	c.Markets = (*MarketService)(&c.common)
+	c.markets = (*MarketService)(&c.common)
 	c.wallets = (*WalletService)(&c.common)
 
 	for _, opt := range opts {
@@ -69,6 +69,10 @@ func New(opts ...Option) *Client {
 
 func (c *Client) Wallets() IWalletService {
 	return c.wallets
+}
+
+func (c *Client) Markets() IMarketService {
+	return c.markets
 }
 
 func (c *Client) DoPublic(uri string, method string, in, out interface{}) error {

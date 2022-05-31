@@ -6,6 +6,14 @@ import (
 	"time"
 )
 
+type IMarketService interface {
+	All() ([]Market, error)
+	Get(name string) (*Market, error)
+	GetOrderBook(name string, opts *GetOrderBookOptions) (*OrderBook, error)
+	GetTrades(name string, opts *GetTradesOptions) ([]Trade, error)
+	GetHistoricalPrices(name string, opts *GetHistoricalPrices) ([]Candle, error)
+}
+
 type MarketService service
 
 const (
